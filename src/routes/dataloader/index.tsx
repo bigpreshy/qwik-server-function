@@ -1,26 +1,41 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { loader$ } from '@builder.io/qwik-city';
 
+import { songs } from "./Song";
 
-export const useGetProduct = loader$(() => {
-    return {
-      id: '42',
-      name: 'Valentines Teddy-Bear',
-      description: 'Handmade and Guaranteed For Life.'
-    };
-  });
-  
-  export default component$(() => {
-    const product = useGetProduct();
-    // Type of product: {id: string, name: string, description: string}
-    return (
-        <>
-      <div>{product.value.name}</div>
-
-      <div>{product.value.description}</div>
+export const useSongs = loader$(() => {
+  return songs;
+});
 
 
-      </>
-      
-    )
-  })
+export const useGetServerTime = loader$(() => {
+  return new Date().toISOString();
+});
+
+export default component$(() => {
+  const serverTime = useGetServerTime();
+  const songs = useSongs();
+  return (
+    // 
+
+    <div>
+      <div>{serverTime}</div>
+      <ul>
+        {songs.value.map((song) => {
+          return (
+            <li>
+              <div>{song.id}</div>
+              <div>{song.name}</div>
+              <div>{song.year}</div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+
+
+
+
+
+  )
+});
